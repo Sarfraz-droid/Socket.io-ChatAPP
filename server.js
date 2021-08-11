@@ -6,7 +6,7 @@ app.use(cors())
 const http = require("http").createServer(app);
 io = require("socket.io")(http,{
     cors: {
-        origin: "http://localhost:3000",
+        origin: "https://chat-app-a9cfd.web.app",
         methods: ["GET", "POST"]
       }    
 });
