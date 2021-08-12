@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
     BrowserRouter,
     Switch,
@@ -8,13 +8,15 @@ import {
 import Form from "./Form";
 import Chat from "./Chat";
 import io from "socket.io-client";
-// 
-console.log(socket);
+// https://guarded-scrubland-22840.herokuapp.com/
+let socket = io("http://localhost:4000");
+
 function App() {
 
     const [Room, setRoom] = useState('');
     const [Name, setName] = useState('');
-    const socket = io("https://guarded-scrubland-22840.herokuapp.com/");
+    console.log(socket);
+
 
   return (
       <div>

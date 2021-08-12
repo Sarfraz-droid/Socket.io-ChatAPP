@@ -5,6 +5,7 @@ import plane from "./images/paper-plane - Regular Straight.svg"
 import {Link} from "react-router-dom"
 import { useImmer } from "use-immer";
 import { useHistory } from 'react-router-dom';
+import io from "socket.io-client";
 
 import Chatbox from "./Components/Chatbox";
 import Servermsg from "./Components/Servemsg"
@@ -31,7 +32,7 @@ function Chat(props) {
     
     const sendMsg = (e) => {
         e.preventDefault();
-        props.socket.emit("chat-message", { name: props.Name, message: msg });
+        props.socket.emit("chat-message", { name: props.Name, message: msg ,  room : props.Room });
         setMsg('');
     }
 
@@ -41,9 +42,9 @@ function Chat(props) {
         <div className="head-section">
           <span className="go-back">
             <img className="back" src={arrow} onClick={() => {
-                props.socket.disconnect();
-                History.goBack();
-
+              setList([]);
+              History.goBack();
+              props.socket.emit("leave-room",{ name: props.Name, room: props.Room });
             }
             }/>
           </span>
