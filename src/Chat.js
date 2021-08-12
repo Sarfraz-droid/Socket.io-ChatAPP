@@ -4,12 +4,18 @@ import arrow from "./images/angle-left - Regular Straight.svg"
 import plane from "./images/paper-plane - Regular Straight.svg"
 import {Link} from "react-router-dom"
 import { useImmer } from "use-immer";
+import { useHistory } from 'react-router-dom';
+
 import Chatbox from "./Components/Chatbox";
+import Servermsg from "./Components/Servemsg"
+
+import ScrollableFeed from 'react-scrollable-feed'
 
 function Chat(props) {
+  const History = useHistory();
 
     const [msg, setMsg] = useState('');
-    const [List, setList] = useState([{name: 'Chat',message: 'Start Chatting'}]);
+    const [List, setList] = useState([{name: 'Server',message: 'Start Chatting',isServer: true}]);
     
     useEffect(() => {
         props.socket.on("chat-message", function (msg){
@@ -34,15 +40,23 @@ function Chat(props) {
       <div className="chat">
         <div className="head-section">
           <span className="go-back">
-              <Link to="/">
-            <img className="back" src={arrow}/>
-            </Link>
+            <img className="back" src={arrow} onClick={() => {
+                props.socket.disconnect();
+                History.goBack();
+
+            }
+            }/>
           </span>
           <div className="room-name">{props.Room}</div>
         </div>
-        <div className="msg-section">
-            {List.map(msg => <Chatbox info={msg} isMine={props.Name === msg.name?true: false}/>)}
-        </div>
+        <ScrollableFeed className="msg-section">
+            {List.map((msg) => {
+              if(msg.isServer===undefined)
+                return(<Chatbox info={msg} isMine={props.Name === msg.name?true: false}/>)
+              else
+                return(<Servermsg message={msg.message}/>)
+            })}
+        </ScrollableFeed>
         <div className="msg-send" >
             <form onSubmit={sendMsg}>
                 <div className="input-msg">
