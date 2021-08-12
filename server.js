@@ -17,12 +17,17 @@ io.on("connection", (socket) => {
     socket.on("join-room",(user) => {
         console.log(user);
         socket.join(user.room);
-        socket.broadcast.to(user.room).emit("chat-message", {name: "Server" ,message: user.name + " has joined the chat"});
+        socket.broadcast.to(user.room).emit("chat-message", {name: "Server" ,message: user.name + " has joined the chat",isServer: true});
         
         socket.on('chat-message', msg => {
             // console.log(msg);
             io.to(user.room).emit('chat-message', msg);
         });
+
+
+        socket.on("disconnect", () => {
+            socket.broadcast.to(user.room).emit("chat-message", {name: "Server" ,message: user.name + " has left the chat",isServer: true});
+        })
 
     });
 
