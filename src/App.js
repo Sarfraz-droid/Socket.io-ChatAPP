@@ -9,12 +9,12 @@ import Form from "./Form";
 import Chat from "./Chat";
 import io from "socket.io-client";
 // 
-const socket = io("https://guarded-scrubland-22840.herokuapp.com/");
 console.log(socket);
 function App() {
 
     const [Room, setRoom] = useState('');
     const [Name, setName] = useState('');
+    const socket = io("https://guarded-scrubland-22840.herokuapp.com/");
 
   return (
       <div>
